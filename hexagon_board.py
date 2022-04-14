@@ -161,11 +161,7 @@ class App(tkinter.Tk):
     #     insect_selection_window.title("Select your insect")
 
 
-
-
-
-
 # ----------------------------------------------------------
-if __name__ == '__main__':
-    app = App()
-    app.mainloop()
+# if __name__ == '__main__':
+#     app = App()
+#     app.mainloop()
