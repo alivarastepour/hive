@@ -2,7 +2,7 @@ import tkinter
 from turtle import Canvas
 import math
 from tkinter.ttk import *
-
+from gameInstance import game
 
 class Field:
     types = {
@@ -147,7 +147,8 @@ class App(tkinter.Tk):
             self.can.itemconfigure(i.tags, fill=i.color)
         clicked = self.can.find_closest(x, y)[0]  # find closest
         self.hexagons[int(clicked) - 1].selected = True
-        print(f"x: {clicked % 22}, y: {clicked // 22} selected.")
+        game.selectedHexagon = (clicked % 22 - 1, clicked // 22)
+        # print(f"x: {clicked % 22 - 1}, y: {clicked // 22} selected.")
         for i in self.hexagons:  # re-configure selected only
             if i.selected:
                 self.can.itemconfigure(i.tags, fill="#00FFFF")
@@ -160,8 +161,7 @@ class App(tkinter.Tk):
     #     insect_selection_window = tkinter.Toplevel(tkinter.Tk)
     #     insect_selection_window.title("Select your insect")
 
-
 # ----------------------------------------------------------
-# if __name__ == '__main__':
-#     app = App()
-#     app.mainloop()
+if __name__ == '__main__':
+    app = App()
+    app.mainloop()
