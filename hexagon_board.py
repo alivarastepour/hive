@@ -1,8 +1,12 @@
 import tkinter
+from pydoc import text
+from tkinter import TOP, LEFT, RIGHT, BOTTOM, BOTH, ttk, Y, END
 from turtle import Canvas
 import math
 from tkinter.ttk import *
+
 from gameInstance import game
+
 
 class Field:
     types = {
@@ -98,16 +102,66 @@ class FillHexagon:
 
 
 # ---------------------------------------------------------
+def open_window_for_insect_selection(mainWindow):
+    insect_selection_window = tkinter.Toplevel(app)
+    insect_selection_window.title("Select your insect")
+    insect_selection_window.geometry("300x200")
+
+    Label(insect_selection_window, text='Select the insect you want', font=('Verdana', 12)).pack(side=TOP, pady=10)
+    pane = Frame(insect_selection_window)
+    pane.pack(fill=BOTH, expand=True)
+
+    queenPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\queen.png", )
+    Button(pane, image=queenPhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
+    # lbl_queen_count = tkinter.Label(
+    #     master=insect_selection_window,
+    #     text='1',
+    #     width=10,
+    #     height=5,
+    # ).pack(fill=BOTH, expand=True, side=RIGHT)
+    antPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\ant.png")
+    Button(pane, image=antPhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
+    # lbl_ant_count = tkinter.Label(
+    #     master=insect_selection_window,
+    #     text='3',
+    #     width=10,
+    #     height=5,
+    # ).pack(side=RIGHT , fill=BOTH , expand=True)
+
+    beetlePhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\beetle.png")
+    Button(pane, image=beetlePhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
+
+    spiderPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\spider.png")
+    Button(pane, image=spiderPhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
+
+    grassshoperPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\grassshoper.png")
+    Button(pane, image=grassshoperPhoto_btn).pack(side=TOP, fill=BOTH, expand=True)
+
+    # scrollbar = ttk.Scrollbar(insect_selection_window , orient='vertical', command=text.yview)
+    # scrollbar.pack(side=RIGHT)
+
+    scrollbar = Scrollbar(insect_selection_window)
+    scrollbar.pack(side=RIGHT, fill=Y)
+    list_of_btns = tkinter.Listbox(pane, yscrollcommand=scrollbar.set)
+    list_of_btns.insert(END, queenPhoto_btn)
+    list_of_btns.insert(END, antPhoto_btn)
+    list_of_btns.insert(END, beetlePhoto_btn)
+    list_of_btns.insert(END, spiderPhoto_btn)
+    list_of_btns.insert(END, grassshoperPhoto_btn)
+    list_of_btns.pack(side=LEFT, fill=BOTH)
+    scrollbar.config(command=list_of_btns.yview)
+    pane.mainloop()
+
+
 class App(tkinter.Tk):
     def __init__(self):
         tkinter.Tk.__init__(self)
-        self.title("Hexagon Grid")
+        self.title("Hive")
         self.can = Canvas(self, width=800, height=1000, bg="#66CDAA")
         self.can.pack()
 
         self.hexagons = []
-        self.initGrid(22, 22, 20, debug=False
-                      )
+        self.initGrid(22, 22, 20, debug=False)
 
         self.can.bind("<Button-1>", self.click)
 
@@ -148,20 +202,18 @@ class App(tkinter.Tk):
         clicked = self.can.find_closest(x, y)[0]  # find closest
         self.hexagons[int(clicked) - 1].selected = True
         game.selectedHexagon = (clicked % 22 - 1, clicked // 22)
-        # print(f"x: {clicked % 22 - 1}, y: {clicked // 22} selected.")
+        # print(f"x: {clicked % 22 -1 }, y: {clicked // 22} selected.")
         for i in self.hexagons:  # re-configure selected only
             if i.selected:
                 self.can.itemconfigure(i.tags, fill="#00FFFF")
             if i.isNeighbour:
                 self.can.itemconfigure(i.tags, fill="#76d576")
-        # insect_selection_window = tkinter.Toplevel(tkinter.Tk)
-        # insect_selection_window.title("Select your insect")
+        open_window_for_insect_selection(app)
 
-    # def open_window_for_insect_selection(self):
-    #     insect_selection_window = tkinter.Toplevel(tkinter.Tk)
-    #     insect_selection_window.title("Select your insect")
 
 # ----------------------------------------------------------
+
+
 if __name__ == '__main__':
     app = App()
     app.mainloop()
