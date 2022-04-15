@@ -50,6 +50,14 @@ class Game:
         if self.isFirstMove:
             self.isFirstMove = False
 
+    def isHomeSurrounded(self, x, y):
+        neighbors = getNeighbors(x, y)
+        count = 0
+        for neighbor in neighbors:
+            if neighbor in self.occupiedHomes.keys():
+                count += 1
+        return count == 6
+
     def grasshopperValidMoves(self, x, y):  # returns all valid positions for a grasshopper
         validHomes = []
         if (x, y) not in self.occupiedHomes.keys():
@@ -66,4 +74,12 @@ class Game:
                     validHomes.append(possibleHome)
                     break
                 x, y = getCoordinates(x, y, direction)
+        return validHomes
+
+    def queenValidMoves(self, x, y):
+        validHomes = []
+        neighbors = getNeighbors(x, y)
+        for neighbor in neighbors:
+            if neighbor not in self.occupiedHomes.keys() and not self.isHomeSurrounded(*neighbor):
+                validHomes.append(neighbor)
         return validHomes
