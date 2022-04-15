@@ -43,7 +43,7 @@ class Game:
                         if player is not None and player != self.turn:
                             invalid.append(h)
                 arr = list(filter(lambda b: b not in invalid, arr))
-        return arr
+        return list(set(arr))
 
     def fillHome(self, user, piece, x, y):  # updates a home state with new piece
         self.occupiedHomes.update({(x, y): (user, piece)})
@@ -76,10 +76,28 @@ class Game:
                 x, y = getCoordinates(x, y, direction)
         return validHomes
 
-    def queenValidMoves(self, x, y):
+    def queenValidMoves(self, x, y):  # returns all valid positions for a queen
         validHomes = []
         neighbors = getNeighbors(x, y)
         for neighbor in neighbors:
             if neighbor not in self.occupiedHomes.keys() and not self.isHomeSurrounded(*neighbor):
                 validHomes.append(neighbor)
         return validHomes
+
+    # def spiderValidMoves(self, x, y):
+    #     validHomes = []
+    #     possibleHomes = []
+    #     directions = ['nw', 'n', 'ne', 'sw', 's', 'se', ]
+    #     for direction in directions:
+    #         for i in range(3):
+    #             currentDir = getCoordinates(x, y, direction)
+    #             x, y = currentDir
+    #         possibleHomes.append((x, y))
+    #     availablePositions = self.availablePositions()
+    #     for possibleHome in possibleHomes:
+    #         if possibleHome in availablePositions:
+    #             validHomes.append(possibleHome)
+    #     return validHomes
+
+    def antValidMoves(self, x, y):  # returns all valid positions for a ant
+        return list(filter(lambda a: a != (x, y), self.availablePositions()))
