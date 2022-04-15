@@ -102,54 +102,88 @@ class FillHexagon:
 
 
 # ---------------------------------------------------------
-def open_window_for_insect_selection(mainWindow):
+def open_window_for_insect_selection(insect_selection_window):
     insect_selection_window = tkinter.Toplevel(app)
     insect_selection_window.title("Select your insect")
-    insect_selection_window.geometry("300x200")
-
+    insect_selection_window.geometry("400x800")
     Label(insect_selection_window, text='Select the insect you want', font=('Verdana', 12)).pack(side=TOP, pady=10)
+
     pane = Frame(insect_selection_window)
     pane.pack(fill=BOTH, expand=True)
-
-    queenPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\queen.png", )
-    Button(pane, image=queenPhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
-    # lbl_queen_count = tkinter.Label(
-    #     master=insect_selection_window,
-    #     text='1',
-    #     width=10,
-    #     height=5,
-    # ).pack(fill=BOTH, expand=True, side=RIGHT)
-    antPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\ant.png")
-    Button(pane, image=antPhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
-    # lbl_ant_count = tkinter.Label(
-    #     master=insect_selection_window,
-    #     text='3',
-    #     width=10,
-    #     height=5,
-    # ).pack(side=RIGHT , fill=BOTH , expand=True)
-
-    beetlePhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\beetle.png")
-    Button(pane, image=beetlePhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
-
-    spiderPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\spider.png")
-    Button(pane, image=spiderPhoto_btn).pack(side=TOP, fill=BOTH, expand=True, )
-
-    grassshoperPhoto_btn = tkinter.PhotoImage(file=r"D:\University\Term4\AI\project\assets\grassshoper.png")
-    Button(pane, image=grassshoperPhoto_btn).pack(side=TOP, fill=BOTH, expand=True)
+    # queen information
+    queenPhoto_btn = tkinter.PhotoImage(file="./assets/queen.png", )
+    queenPhoto_btn = queenPhoto_btn.zoom(21)
+    queenPhoto_btn = queenPhoto_btn.subsample(50)
+    Button(pane, image=queenPhoto_btn).place(x=50, y=0)
+    lbl_queen_count = tkinter.Label(
+        master=pane,
+        text='1',
+        width=15,
+        height=6,
+        borderwidth=1, relief="solid"
+    ).place(x=250, y=0)
+    #ant information
+    antPhoto_btn = tkinter.PhotoImage(file="./assets/ant.png")
+    antPhoto_btn = antPhoto_btn.zoom(22)
+    antPhoto_btn = antPhoto_btn.subsample(50)
+    Button(pane, image=antPhoto_btn).place(x=50, y=120)
+    lbl_ant_count = tkinter.Label(
+        master=insect_selection_window,
+        text='3',
+        width=15,
+        height=6,
+        borderwidth=1, relief="solid"
+    ).place(x=250, y=167)
+    #beetle information
+    beetlePhoto_btn = tkinter.PhotoImage(file="./assets/beetle.png")
+    beetlePhoto_btn = beetlePhoto_btn.zoom(19)
+    beetlePhoto_btn = beetlePhoto_btn.subsample(52)
+    Button(pane, image=beetlePhoto_btn).place(x=50, y=300)
+    lbl_beetle_count = tkinter.Label(
+        master=insect_selection_window,
+        text='2',
+        width=15,
+        height=6,
+        borderwidth=1, relief="solid"
+    ).place(x=250, y=325)
+    # spider information
+    spiderPhoto_btn = tkinter.PhotoImage(file="./assets/spider.png")
+    spiderPhoto_btn = spiderPhoto_btn.zoom(28)
+    spiderPhoto_btn = spiderPhoto_btn.subsample(40)
+    Button(pane, image=spiderPhoto_btn).place(x=50 , y=450)
+    lbl_beetle_count = tkinter.Label(
+        master=insect_selection_window,
+        text='2',
+        width=15,
+        height=6,
+        borderwidth=1, relief="solid"
+    ).place(x=250, y=500)
+    # grasshopper information
+    grasshoperPhoto_btn = tkinter.PhotoImage(file="./assets/grasshoper.png")
+    grasshoperPhoto_btn = grasshoperPhoto_btn.zoom(20)
+    grasshoperPhoto_btn = grasshoperPhoto_btn.subsample(50)
+    Button(pane, image=grasshoperPhoto_btn).place(x=50 , y=600)
+    lbl_grasshoper_count = tkinter.Label(
+        master=insect_selection_window,
+        text='3',
+        width=15,
+        height=6,
+        borderwidth=1, relief="solid"
+    ).place(x=250, y=640)
 
     # scrollbar = ttk.Scrollbar(insect_selection_window , orient='vertical', command=text.yview)
     # scrollbar.pack(side=RIGHT)
 
-    scrollbar = Scrollbar(insect_selection_window)
-    scrollbar.pack(side=RIGHT, fill=Y)
-    list_of_btns = tkinter.Listbox(pane, yscrollcommand=scrollbar.set)
-    list_of_btns.insert(END, queenPhoto_btn)
-    list_of_btns.insert(END, antPhoto_btn)
-    list_of_btns.insert(END, beetlePhoto_btn)
-    list_of_btns.insert(END, spiderPhoto_btn)
-    list_of_btns.insert(END, grassshoperPhoto_btn)
-    list_of_btns.pack(side=LEFT, fill=BOTH)
-    scrollbar.config(command=list_of_btns.yview)
+    # scrollbar = Scrollbar(insect_selection_window)
+    # scrollbar.pack(side=RIGHT, fill=Y)
+    # list_of_btns = tkinter.Listbox(pane, yscrollcommand=scrollbar.set)
+    # list_of_btns.insert(END, queenPhoto_btn)
+    # list_of_btns.insert(END, antPhoto_btn)
+    # list_of_btns.insert(END, beetlePhoto_btn)
+    # list_of_btns.insert(END, spiderPhoto_btn)
+    # list_of_btns.insert(END, grassshoperPhoto_btn)
+    # list_of_btns.pack(side=LEFT, fill=BOTH)
+    # scrollbar.config(command=list_of_btns.yview)
     pane.mainloop()
 
 
