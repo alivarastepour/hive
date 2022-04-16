@@ -99,5 +99,11 @@ class Game:
     #             validHomes.append(possibleHome)
     #     return validHomes
 
-    def antValidMoves(self, x, y):  # returns all valid positions for a ant
+    def antValidMoves(self, x, y):  # returns all valid positions for an ant
         return list(filter(lambda a: a != (x, y), self.availablePositions()))
+
+    def beetleValidMoves(self, x, y):  # returns all valid positions for a beetle
+        neighbors = getNeighbors(x, y)
+        availablePositions = self.availablePositions()
+        validHomes = [home for home in neighbors if home in availablePositions or home in self.occupiedHomes.keys()]
+        return validHomes
