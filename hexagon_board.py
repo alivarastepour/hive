@@ -4,17 +4,10 @@ from tkinter import TOP, LEFT, RIGHT, BOTTOM, BOTH, ttk, Y, END
 from turtle import Canvas
 import math
 from tkinter.ttk import *
-
 from gameInstance import game
 
 
 class Field:
-    types = {
-        "grass": "#a1e2a1",
-        "water": "#60ace6",
-        "mountain": "#a1603a"
-    }
-
     def __init__(self, parent, x, y, kind, size):
         self.parent = parent
         self.x = x
@@ -67,7 +60,6 @@ class FillHexagon:
         self.y = y  # top left y
         self.length = length  # length of a side
         self.color = color  # fill color
-
         self.selected = False
         self.tags = tags
 
@@ -104,95 +96,131 @@ class FillHexagon:
 # ---------------------------------------------------------
 def open_window_for_insect_selection(insect_selection_window):
     insect_selection_window = tkinter.Toplevel(app)
-    insect_selection_window.title("Select your insect")
+    insect_selection_window.title("Insect Selection")
     insect_selection_window.geometry("400x800")
     Label(insect_selection_window, text='Select the insect you want', font=('Verdana', 12)).pack(side=TOP, pady=10)
 
     pane = Frame(insect_selection_window)
     pane.pack(fill=BOTH, expand=True)
+
     # queen information
+    lbl_queen_count = tkinter.Label(
+        master=pane,
+        text=1,
+        width=15,
+        height=6,
+        borderwidth=1, relief="solid"
+    )
+    lbl_queen_count.place(x=250, y=0)
     queenPhoto_btn = tkinter.PhotoImage(file="./assets/queen.png", )
     queenPhoto_btn = queenPhoto_btn.zoom(21)
     queenPhoto_btn = queenPhoto_btn.subsample(50)
-    Button(pane, image=queenPhoto_btn).place(x=50, y=0)
-    lbl_queen_count = tkinter.Label(
-        master=pane,
-        text='1',
+    Button(pane, image=queenPhoto_btn, command=lambda: minus_1_queen()).place(x=50, y=0)
+
+    # ant information
+    lbl_ant_count = tkinter.Label(
+        master=insect_selection_window,
+        text=3,
         width=15,
         height=6,
         borderwidth=1, relief="solid"
-    ).place(x=250, y=0)
-    #ant information
+    )
+    lbl_ant_count.place(x=250, y=167)
     antPhoto_btn = tkinter.PhotoImage(file="./assets/ant.png")
     antPhoto_btn = antPhoto_btn.zoom(22)
     antPhoto_btn = antPhoto_btn.subsample(50)
-    Button(pane, image=antPhoto_btn).place(x=50, y=120)
-    lbl_ant_count = tkinter.Label(
-        master=insect_selection_window,
-        text='3',
-        width=15,
-        height=6,
-        borderwidth=1, relief="solid"
-    ).place(x=250, y=167)
-    #beetle information
+    Button(pane, image=antPhoto_btn, command=lambda: minus_1_ant()).place(x=50, y=120)
+
+    # beetle information
     beetlePhoto_btn = tkinter.PhotoImage(file="./assets/beetle.png")
     beetlePhoto_btn = beetlePhoto_btn.zoom(19)
     beetlePhoto_btn = beetlePhoto_btn.subsample(52)
-    Button(pane, image=beetlePhoto_btn).place(x=50, y=300)
+    Button(pane, image=beetlePhoto_btn , command = lambda : minus_1_beetle()).place(x=50, y=300)
     lbl_beetle_count = tkinter.Label(
         master=insect_selection_window,
-        text='2',
+        text=2,
         width=15,
         height=6,
         borderwidth=1, relief="solid"
-    ).place(x=250, y=325)
+    )
+    lbl_beetle_count.place(x=250, y=325)
+
     # spider information
     spiderPhoto_btn = tkinter.PhotoImage(file="./assets/spider.png")
     spiderPhoto_btn = spiderPhoto_btn.zoom(28)
     spiderPhoto_btn = spiderPhoto_btn.subsample(40)
-    Button(pane, image=spiderPhoto_btn).place(x=50 , y=450)
-    lbl_beetle_count = tkinter.Label(
+    Button(pane, image=spiderPhoto_btn , command = lambda : minus_1_spider()).place(x=50, y=450)
+    lbl_spider_count = tkinter.Label(
         master=insect_selection_window,
-        text='2',
+        text=2,
         width=15,
         height=6,
         borderwidth=1, relief="solid"
-    ).place(x=250, y=500)
+    )
+    lbl_spider_count.place(x=250, y=500)
+
     # grasshopper information
     grasshoperPhoto_btn = tkinter.PhotoImage(file="./assets/grasshoper.png")
     grasshoperPhoto_btn = grasshoperPhoto_btn.zoom(20)
     grasshoperPhoto_btn = grasshoperPhoto_btn.subsample(50)
-    Button(pane, image=grasshoperPhoto_btn).place(x=50 , y=600)
+    Button(pane, image=grasshoperPhoto_btn , command = lambda : minus_1_grasshoper()).place(x=50, y=600)
     lbl_grasshoper_count = tkinter.Label(
         master=insect_selection_window,
-        text='3',
+        text=3,
         width=15,
         height=6,
         borderwidth=1, relief="solid"
-    ).place(x=250, y=640)
+    )
+    lbl_grasshoper_count.place(x=250, y=640)
 
-    # scrollbar = ttk.Scrollbar(insect_selection_window , orient='vertical', command=text.yview)
-    # scrollbar.pack(side=RIGHT)
+    def minus_1_queen():
+        if lbl_queen_count['text'] >= 1:
+            lbl_queen_count['text'] = lbl_queen_count['text'] - 1
+        else:
+            print("You can't choose this insect")
 
-    # scrollbar = Scrollbar(insect_selection_window)
-    # scrollbar.pack(side=RIGHT, fill=Y)
-    # list_of_btns = tkinter.Listbox(pane, yscrollcommand=scrollbar.set)
-    # list_of_btns.insert(END, queenPhoto_btn)
-    # list_of_btns.insert(END, antPhoto_btn)
-    # list_of_btns.insert(END, beetlePhoto_btn)
-    # list_of_btns.insert(END, spiderPhoto_btn)
-    # list_of_btns.insert(END, grassshoperPhoto_btn)
-    # list_of_btns.pack(side=LEFT, fill=BOTH)
-    # scrollbar.config(command=list_of_btns.yview)
+    def minus_1_ant():
+        if lbl_ant_count['text'] >= 1:
+            lbl_ant_count['text'] = lbl_ant_count['text'] - 1
+        else:
+            print("You can't choose this insect")
+
+    def minus_1_beetle():
+        if lbl_beetle_count['text'] >= 1:
+            lbl_beetle_count['text'] = lbl_beetle_count['text'] - 1
+        else:
+            print("You can't choose this insect")
+
+    def minus_1_spider():
+        if lbl_spider_count['text'] >= 1:
+            lbl_spider_count['text'] = lbl_spider_count['text'] - 1
+        else:
+            print("You can't choose this insect")
+
+    def minus_1_grasshoper():
+        if lbl_grasshoper_count['text'] >= 1:
+            lbl_grasshoper_count['text'] = lbl_grasshoper_count['text'] - 1
+        else:
+            print("You can't choose this insect")
+
     pane.mainloop()
+
+
+# def button_got_clicked():
+# print("fuck u")
 
 
 class App(tkinter.Tk):
     def __init__(self):
         tkinter.Tk.__init__(self)
         self.title("Hive")
-        self.can = Canvas(self, width=800, height=1000, bg="#66CDAA")
+        self.can = Canvas(self, width=1000, height=1000, bg="#66CDAA")
         self.can.pack()
+        first_player_board = tkinter.Label(
+            master=self,
+            text="First Player's Insect Board",
+
+        ).place(x=800, y=10)
 
         self.hexagons = []
         self.initGrid(22, 22, 20, debug=False)
