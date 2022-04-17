@@ -163,7 +163,7 @@ def open_window_for_insect_selection(insect_selection_window):
     grasshoperPhoto_btn = tkinter.PhotoImage(file="./assets/grasshoper.png")
     grasshoperPhoto_btn = grasshoperPhoto_btn.zoom(20)
     grasshoperPhoto_btn = grasshoperPhoto_btn.subsample(50)
-    Button(pane, image=grasshoperPhoto_btn , command = lambda : minus_1_grasshoper()).place(x=50, y=600)
+    Button(pane, image=grasshoperPhoto_btn , command = lambda : minus_1_grasshopper()).place(x=50, y=600)
     lbl_grasshoper_count = tkinter.Label(
         master=insect_selection_window,
         text=3,
@@ -176,30 +176,35 @@ def open_window_for_insect_selection(insect_selection_window):
     def minus_1_queen():
         if lbl_queen_count['text'] >= 1:
             lbl_queen_count['text'] = lbl_queen_count['text'] - 1
+            print("Queen is chosen")
         else:
             print("You can't choose this insect")
 
     def minus_1_ant():
         if lbl_ant_count['text'] >= 1:
             lbl_ant_count['text'] = lbl_ant_count['text'] - 1
+            print("Ant is chosen")
         else:
             print("You can't choose this insect")
 
     def minus_1_beetle():
         if lbl_beetle_count['text'] >= 1:
             lbl_beetle_count['text'] = lbl_beetle_count['text'] - 1
+            print("Beetle is chosen")
         else:
             print("You can't choose this insect")
 
     def minus_1_spider():
         if lbl_spider_count['text'] >= 1:
             lbl_spider_count['text'] = lbl_spider_count['text'] - 1
+            print("Spider is chosen")
         else:
             print("You can't choose this insect")
 
-    def minus_1_grasshoper():
+    def minus_1_grasshopper():
         if lbl_grasshoper_count['text'] >= 1:
             lbl_grasshoper_count['text'] = lbl_grasshoper_count['text'] - 1
+            print("Grasshopper is chosen ")
         else:
             print("You can't choose this insect")
 
@@ -214,13 +219,8 @@ class App(tkinter.Tk):
     def __init__(self):
         tkinter.Tk.__init__(self)
         self.title("Hive")
-        self.can = Canvas(self, width=1000, height=1000, bg="#66CDAA")
+        self.can = Canvas(self, width=660, height=1000, bg="#66CDAA")
         self.can.pack()
-        first_player_board = tkinter.Label(
-            master=self,
-            text="First Player's Insect Board",
-
-        ).place(x=800, y=10)
 
         self.hexagons = []
         self.initGrid(22, 22, 20, debug=False)
