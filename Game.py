@@ -11,6 +11,21 @@ def createBoard():  # inits the game's board
     return board
 
 
+def getGraphBoundaries(graph):
+    minX, maxX, minY, maxY = 22, 0, 22, 0
+    for vertex in graph:
+        x, y = vertex
+        if x > maxX:
+            maxX = x
+        if x < minX:
+            minX = x
+        if y > maxY:
+            maxY = y
+        if y < minY:
+            minY = y
+    return (minX, maxX), (minY, maxY)
+
+
 class Game:
     def __init__(self):
         self.selectedHexagon = ''  # determines which hexagon is selected
@@ -84,26 +99,36 @@ class Game:
                 validHomes.append(neighbor)
         return validHomes
 
-    # def spiderValidMoves(self, x, y):
-    #     validHomes = []
-    #     possibleHomes = []
-    #     directions = ['nw', 'n', 'ne', 'sw', 's', 'se', ]
-    #     for direction in directions:
-    #         for i in range(3):
-    #             currentDir = getCoordinates(x, y, direction)
-    #             x, y = currentDir
-    #         possibleHomes.append((x, y))
-    #     availablePositions = self.availablePositions()
-    #     for possibleHome in possibleHomes:
-    #         if possibleHome in availablePositions:
-    #             validHomes.append(possibleHome)
-    #     return validHomes
-
     def antValidMoves(self, x, y):  # returns all valid positions for an ant
         return list(filter(lambda a: a != (x, y), self.availablePositions()))
 
     def beetleValidMoves(self, x, y):  # returns all valid positions for a beetle
         neighbors = getNeighbors(x, y)
+
         availablePositions = self.availablePositions()
-        validHomes = [home for home in neighbors if home in availablePositions or home in self.occupiedHomes.keys()]
+        validHomes = [
+            home for home in neighbors
+            if (home in availablePositions or home in self.occupiedHomes.keys())
+               and home not in self.isHomeSurrounded(*home)
+        ]
         return validHomes
+
+    def spiderValidMoves(self, x, y):
+        validHomes, possibleHomes = [], []
+        neighbors = getNeighbors(x, y)
+        for firstLevelNeighbor in neighbors:
+            for secondLevelNeighbor in getNeighbors(*firstLevelNeighbor):
+                for thirdLevelNeighbor in getNeighbors(*secondLevelNeighbor):
+                    if firstLevelNeighbor == thirdLevelNeighbor or thirdLevelNeighbor in self.occupiedHomes or thirdLevelNeighbor in validHomes or thirdLevelNeighbor not in self.availablePositions():
+                        continue
+                    validHomes.append((thirdLevelNeighbor[0], thirdLevelNeighbor[1]))
+        return validHomes
+
+    def checkConnectivity(self, graph, x, y):
+        neighbors = getNeighbors(x, y)
+        counter = 0
+        for neighbor in neighbors:
+            if neighbor in graph:
+                counter += 1
+
+
