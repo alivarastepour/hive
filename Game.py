@@ -34,9 +34,17 @@ class Game:
         self.error = ''  # determines whether there is an error or not
         self.board = createBoard()  # keeps track of game's board
         self.isFirstMove = True  # determines whether this is the first move
+        self.isSecondMove = False  # determines whether this is the second move
         self.occupiedHomes = dict()  # keeps track of occupied homes
 
     def availablePositions(self):  # calculates available positions for a user
+        if self.isFirstMove:
+            self.isFirstMove = False
+            self.isSecondMove = True
+            return [(11, 11)]
+        if self.isSecondMove:
+            self.isSecondMove = False
+            return getNeighbors(11, 11)
         arr = []
         for (x, y) in self.occupiedHomes.keys():
             arr.extend(getNeighbors(x, y))
@@ -130,5 +138,3 @@ class Game:
         for neighbor in neighbors:
             if neighbor in graph:
                 counter += 1
-
-
