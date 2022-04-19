@@ -119,8 +119,8 @@ class Game:
         availablePositions = self.availablePositions()
         validHomes = [
             home for home in neighbors
-            if (home in availablePositions or home in self.occupiedHomes.keys())
-               and home not in self.isHomeSurrounded(*home)
+            if (home in availablePositions or home in self.occupiedHomes.keys()) and
+               home not in self.isHomeSurrounded(*home)
         ]
         return validHomes
 
@@ -130,14 +130,32 @@ class Game:
         for firstLevelNeighbor in neighbors:
             for secondLevelNeighbor in getNeighbors(*firstLevelNeighbor):
                 for thirdLevelNeighbor in getNeighbors(*secondLevelNeighbor):
-                    if firstLevelNeighbor == thirdLevelNeighbor or thirdLevelNeighbor in self.occupiedHomes or thirdLevelNeighbor in validHomes or thirdLevelNeighbor not in self.availablePositions():
+                    if firstLevelNeighbor == thirdLevelNeighbor or thirdLevelNeighbor in self.occupiedHomes or \
+                            thirdLevelNeighbor in validHomes or thirdLevelNeighbor not in self.availablePositions():
                         continue
                     validHomes.append((thirdLevelNeighbor[0], thirdLevelNeighbor[1]))
         return validHomes
 
-    def checkConnectivity(self, graph, x, y):
-        neighbors = getNeighbors(x, y)
-        counter = 0
-        for neighbor in neighbors:
-            if neighbor in graph:
-                counter += 1
+    def findPath(self, graph, v1, v2, visited):
+        if v1 == v2:
+            return True
+        neighbors = list(filter(lambda v: v in graph, getNeighbors(*v1)))
+        if v2 in neighbors:
+            return True
+        elif len(neighbors) != 0:
+            for neighbor in neighbors:
+                if neighbor in visited:
+                    continue
+                visited.append(v1)
+                res = self.findPath(graph, neighbor, v2, visited)
+                if res:
+                    return True
+        return False
+
+    def checkConnectivity(self, graph):
+        for v1 in graph:
+            for v2 in graph:
+                pathExists = self.findPath(graph, v1, v2, [])
+                if not pathExists:
+                    return False
+        return True
