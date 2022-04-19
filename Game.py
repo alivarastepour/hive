@@ -84,6 +84,18 @@ class Game:
                 count += 1
         return count == 6
 
+    def canMove(self):  # returns true if the selected piece can move (graph connectivity check)
+        g1 = list(self.occupiedHomes.keys()).copy()
+        g1.remove(self.selectedHexagon)
+        return self.checkConnectivity(g1)
+
+    def canPut(self, x, y):  # returns true if the selected piece can move to a specific position (graph
+        # connectivity check)
+        g1 = list(self.occupiedHomes.keys()).copy()
+        g1.remove(self.selectedHexagon)
+        g1.append((x, y))
+        return self.checkConnectivity(g1)
+
     def grasshopperValidMoves(self, x, y):  # returns all valid positions for a grasshopper
         validHomes = []
         if (x, y) not in self.occupiedHomes.keys():
@@ -115,7 +127,6 @@ class Game:
 
     def beetleValidMoves(self, x, y):  # returns all valid positions for a beetle
         neighbors = getNeighbors(x, y)
-
         availablePositions = self.availablePositions()
         validHomes = [
             home for home in neighbors
@@ -127,11 +138,21 @@ class Game:
     def spiderValidMoves(self, x, y):
         validHomes, possibleHomes = [], []
         neighbors = getNeighbors(x, y)
+        f1 = False
         for firstLevelNeighbor in neighbors:
+            if not self.canPut(*firstLevelNeighbor) or firstLevelNeighbor in self.occupiedHomes.keys():
+                continue
             for secondLevelNeighbor in getNeighbors(*firstLevelNeighbor):
+                if f1:
+                    f1 = False
+                    continue
+                if not self.canPut(*secondLevelNeighbor) or secondLevelNeighbor in self.occupiedHomes.keys():
+                    continue
                 for thirdLevelNeighbor in getNeighbors(*secondLevelNeighbor):
                     if firstLevelNeighbor == thirdLevelNeighbor or thirdLevelNeighbor in self.occupiedHomes or \
-                            thirdLevelNeighbor in validHomes or thirdLevelNeighbor not in self.availablePositions():
+                            thirdLevelNeighbor in validHomes or thirdLevelNeighbor not in self.availablePositions() or \
+                            not self.canPut(*thirdLevelNeighbor):
+                        f1 = True
                         continue
                     validHomes.append((thirdLevelNeighbor[0], thirdLevelNeighbor[1]))
         return validHomes
