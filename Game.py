@@ -30,7 +30,7 @@ class Game:
     def __init__(self):
         self.selectedHexagon = ''  # determines which hexagon is selected
         self.selectedPiece = ''  # determines which piece is selected
-        self.turn = 2  # determines whose turn is it
+        self.turn = 1  # determines whose turn is it
         self.error = ''  # determines whether there is an error or not
         self.board = createBoard()  # keeps track of game's board
         self.isFirstMove = True  # determines whether this is the first move
@@ -130,10 +130,17 @@ class Game:
         availablePositions = self.availablePositions()
         validHomes = [
             home for home in neighbors
-            if (home in availablePositions or home in self.occupiedHomes.keys()) and
-               home not in self.isHomeSurrounded(*home)
+            if (home in availablePositions or home in self.occupiedHomes.keys()) and not self.isHomeSurrounded(*home)
         ]
-        return validHomes
+        valid = []
+        for home in validHomes:
+            g1 = list(self.occupiedHomes.keys()).copy()
+            g1.remove((x, y))
+            g1.append(home)
+            f1 = self.checkConnectivity(g1)
+            if f1:
+                valid.append(home)
+        return valid
 
     def spiderValidMoves(self, x, y):
         validHomes, possibleHomes = [], []
