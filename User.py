@@ -25,7 +25,7 @@ class User:
         )
         self.hasEnteredTheQueen = False  # determines whether individual user's queen has been moved to the board
 
-    def usePiece(self, piece, placement, game):
+    def usePiece(self, piece, game):
         try:
             self.availablePieces.get(piece).pop(0)
         except IndexError:

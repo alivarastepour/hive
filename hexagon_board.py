@@ -5,7 +5,9 @@ from turtle import Canvas
 import math
 from tkinter.ttk import *
 from gameInstance import game
+from userInstance import *
 from constants import *
+from neighborhoodUtil import *
 
 
 class Field:
@@ -15,7 +17,6 @@ class Field:
         self.y = y
         self.kind = kind
         self.color = "#00FFFF"
-        # Field.types[self.kind]
         self.selected = False
 
     def draw(self):
@@ -95,7 +96,7 @@ class FillHexagon:
 
 
 # ---------------------------------------------------------
-def open_window_for_insect_selection(insect_selection_window):
+def open_window_for_insect_selection(insect_selection_window, self):
     main_window = insect_selection_window
     insect_selection_window = tkinter.Toplevel(app)
     insect_selection_window.title("Insect Selection")
@@ -104,6 +105,8 @@ def open_window_for_insect_selection(insect_selection_window):
 
     pane = Frame(insect_selection_window)
     pane.pack(fill=BOTH, expand=True)
+    exit_BTN = Button(insect_selection_window, text="Quit", command=insect_selection_window.destroy)
+    exit_BTN.place(x=80, y=10)
 
     # queen information
     lbl_queen_count = tkinter.Label(
@@ -165,23 +168,23 @@ def open_window_for_insect_selection(insect_selection_window):
     lbl_spider_count.place(x=250, y=500)
 
     # grasshopper information
-    grasshoperPhoto_btn = tkinter.PhotoImage(file="./assets/grasshoper.png")
-    grasshoperPhoto_btn = grasshoperPhoto_btn.zoom(20)
-    grasshoperPhoto_btn = grasshoperPhoto_btn.subsample(50)
-    Button(pane, image=grasshoperPhoto_btn,
+    grasshopperPhoto_btn = tkinter.PhotoImage(file="./assets/grasshoper.png")
+    grasshopperPhoto_btn = grasshopperPhoto_btn.zoom(20)
+    grasshopperPhoto_btn = grasshopperPhoto_btn.subsample(50)
+    Button(pane, image=grasshopperPhoto_btn,
            command=lambda: minus_1_grasshopper(*game.selectedHexagon, main_window)).place(x=50,
                                                                                           y=600)
-    lbl_grasshoper_count = tkinter.Label(
+    lbl_grasshopper_count = tkinter.Label(
         master=insect_selection_window,
         text=3,
         width=15,
         height=6,
         borderwidth=1, relief="solid"
     )
-    lbl_grasshoper_count.place(x=250, y=640)
+    lbl_grasshopper_count.place(x=250, y=640)
 
     def minus_1_queen(x, y, main_window):
-        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='red')
+        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='yellow')
         if lbl_queen_count['text'] >= 1:
             lbl_queen_count['text'] = lbl_queen_count['text'] - 1
             print("Queen is chosen")
@@ -190,7 +193,7 @@ def open_window_for_insect_selection(insect_selection_window):
         game.fillHome(game.turn, QUEEN, x, y)
 
     def minus_1_ant(x, y, main_window):
-        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='green')
+        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#ED9121')
         if lbl_ant_count['text'] >= 1:
             lbl_ant_count['text'] = lbl_ant_count['text'] - 1
             print("Ant is chosen")
@@ -199,7 +202,7 @@ def open_window_for_insect_selection(insect_selection_window):
         game.fillHome(game.turn, ANT, x, y)
 
     def minus_1_beetle(x, y, main_window):
-        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='blue')
+        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='black')
         if lbl_beetle_count['text'] >= 1:
             lbl_beetle_count['text'] = lbl_beetle_count['text'] - 1
             print("Beetle is chosen")
@@ -208,7 +211,7 @@ def open_window_for_insect_selection(insect_selection_window):
         game.fillHome(game.turn, BEETLE, x, y)
 
     def minus_1_spider(x, y, main_window):
-        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='purple')
+        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#8A360F')
         if lbl_spider_count['text'] >= 1:
             lbl_spider_count['text'] = lbl_spider_count['text'] - 1
             print("Spider is chosen")
@@ -217,9 +220,9 @@ def open_window_for_insect_selection(insect_selection_window):
         game.fillHome(game.turn, SPIDER, x, y)
 
     def minus_1_grasshopper(x, y, main_window):
-        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='orange')
-        if lbl_grasshoper_count['text'] >= 1:
-            lbl_grasshoper_count['text'] = lbl_grasshoper_count['text'] - 1
+        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#76EE00')
+        if lbl_grasshopper_count['text'] >= 1:
+            lbl_grasshopper_count['text'] = lbl_grasshopper_count['text'] - 1
             print("Grasshopper is chosen ")
         else:
             print("You can't choose this insect")
@@ -229,6 +232,14 @@ def open_window_for_insect_selection(insect_selection_window):
         game.turn = 2
     else:
         game.turn = 1
+    # if game.turn == 1:
+    #     game.turn = 2
+    # else:
+    #     game.turn = 1
+    # avail = game.availablePositions()
+    # for x, y in avail:
+    #     print(x, y)
+    #     self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
     pane.mainloop()
 
 
@@ -242,10 +253,10 @@ class App(tkinter.Tk):
         self.title("Hive")
         self.can = Canvas(self, width=660, height=1000, bg="#66CDAA")
         self.can.pack()
-
+        self.past = []
         self.hexagons = []
         self.initGrid(22, 22, 20, debug=False)
-
+        self.move = False
         self.can.bind("<Button-1>", self.click)
 
     def initGrid(self, cols, rows, size, debug):
@@ -258,13 +269,20 @@ class App(tkinter.Tk):
             else:
                 offset = 0
             for r in range(rows):
-
-                h = FillHexagon(self.can,
-                                c * (size * 1.5),
-                                (r * (size * math.sqrt(3))) + offset,
-                                size,
-                                "#60ace6",
-                                "{}.{}".format(r, c))
+                if r == 11 and c == 11:
+                    h = FillHexagon(self.can,
+                                    c * (size * 1.5),
+                                    (r * (size * math.sqrt(3))) + offset,
+                                    size,
+                                    "#60ace6",
+                                    "{}.{}".format(r, c))
+                else:
+                    h = FillHexagon(self.can,
+                                    c * (size * 1.5),
+                                    (r * (size * math.sqrt(3))) + offset,
+                                    size,
+                                    "#fff",
+                                    "{}.{}".format(r, c))
                 self.hexagons.append(h)
 
                 if debug:
@@ -274,6 +292,12 @@ class App(tkinter.Tk):
                                          text=coords)
 
     def click(self, evt):
+        # self.past -> rang = default
+
+        # print(game.turn)
+        for p in self.past:
+            clk = p[1] * 22 + p[0]
+            self.can.itemconfigure(self.hexagons[clk].tags, fill='white')
         """
         hexagon detection on mouse click
         """
@@ -281,48 +305,82 @@ class App(tkinter.Tk):
         for i in self.hexagons:
             i.selected = False
             i.isNeighbour = False
-            # self.can.itemconfigure(i.tags, fill=i.color)
         clicked = self.can.find_closest(x, y)[0]  # find closest
         self.hexagons[int(clicked) - 1].selected = True
         game.selectedHexagon = (clicked % 22 - 1, clicked // 22)
+        if game.isFirstMove:
+            if game.selectedHexagon != (11, 11):
+                return
+        if game.isSecondMove:
+            if game.selectedHexagon not in getNeighbors(11, 11):
+                return
+        if game.selectedHexagon not in game.availablePositions() and game.selectedHexagon not in game.occupiedHomes.keys():
+            print('s')
+            return
+        if game.selectedHexagon in game.occupiedHomes.keys():
+            print('ret')
+            t = game.occupiedHomes.get(game.selectedHexagon)[0]
+            if t != game.turn:
+                return
         # print(f"x: {clicked % 22 -1 }, y: {clicked // 22} selected.")
+        if self.move:
+            game.changeHome(*game.selectedHexagon)
+            self.move = False
+            if game.turn == 1:
+                game.turn = 2
+            else:
+                game.turn = 1
+            return
         if game.selectedHexagon in game.occupiedHomes.keys():
             piece = game.occupiedHomes.get(game.selectedHexagon)[1]
             avail = []
             print(piece)
             if piece == GRASSHOPPER:
                 avail = game.grasshopperValidMoves(*game.selectedHexagon)
-                game.fillHome(game.turn, piece, x, y)
+                # game.fillHome(game.turn, piece, x, y)
                 for x, y in avail:
-                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='red')
+                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
                 # clicked = self.can.itemconfigure(clicked , fill='#FF4040')
                 print(avail)
             if piece == QUEEN:
                 avail = game.queenValidMoves(*game.selectedHexagon)
                 for x, y in avail:
-                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='yellow')
+                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
                 print(avail)
             if piece == ANT:
                 avail = game.antValidMoves(*game.selectedHexagon)
                 for x, y in avail:
-                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='yellow')
+                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
+
                 print(avail)
             if piece == BEETLE:
                 avail = game.beetleValidMoves(*game.selectedHexagon)
                 for x, y in avail:
-                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='yellow')
+                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
                 print(avail)
             if piece == SPIDER:
                 avail = game.spiderValidMoves(*game.selectedHexagon)
                 for x, y in avail:
-                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='yellow')
-
-                # for item in avail:
-                # item.can.itemconfigure(item, fill="#FF4040")
+                    self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
                 print(avail)
+            self.past = avail.copy()
+            self.move = True
         else:
-            open_window_for_insect_selection(app)
-
+            # avail = game.availablePositions()
+            # for x, y in avail:
+            #     print(x, y)
+            #     self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
+            open_window_for_insect_selection(app, self)
+        print(game.turn)
+        # print('here')
+        # if game.turn == 1:
+        #     game.turn = 2
+        # else:
+        #     game.turn = 1
+        # avail = game.availablePositions()
+        # for x, y in avail:
+        #     print(x, y)
+        #     self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
         # for i in self.hexagons:  # re-configure selected only
         #     if i.selected:
         #         self.can.itemconfigure(i.tags, fill="#00FFFF")

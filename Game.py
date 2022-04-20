@@ -73,6 +73,7 @@ class Game:
         if self.isFirstMove:
             self.isFirstMove = False
 
+
     def changeHome(self, x, y):
         self.occupiedHomes.update({(x, y): self.occupiedHomes.pop(self.selectedHexagon)})
 
