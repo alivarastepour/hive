@@ -218,7 +218,6 @@ def open_window_for_insect_selection(insect_selection_window, self):
 
     def minus_1_ant(x, y, main_window):
         main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#ED9121')
-
         offset = define_offset(x, y)
         if game.turn == 1:
             self.can.create_text(y * (20 * 1.5) + (20 / 2),
@@ -350,9 +349,13 @@ class App(tkinter.Tk):
                                          text=coords)
 
     def click(self, evt):
+        def define_offset(a, b):
+            if b % 2 == 0:
+                offset = 20 * math.sqrt(3) / 2
+            else:
+                offset = 0
+            return offset
         # self.past -> rang = default
-
-        # print(game.turn)
         for p in self.past:
             clk = p[1] * 22 + p[0]
             self.can.itemconfigure(self.hexagons[clk].tags, fill='white')
@@ -364,9 +367,9 @@ class App(tkinter.Tk):
             i.selected = False
             i.isNeighbour = False
         clicked = self.can.find_closest(x, y)[0]  # find closest
-        self.hexagons[int(clicked) - 1].selected = True
+        # print("clicked : ", clicked)
+        self.hexagons[int(clicked)].selected = True
         game.selectedHexagon = (clicked % 22 - 1, clicked // 22)
-
         if game.isFirstMove:
             if game.selectedHexagon != (11, 11):
                 return
@@ -388,7 +391,21 @@ class App(tkinter.Tk):
                 self.move = False
                 self.prev = None
                 return
+            isMove = True
             game.changeHome(*game.selectedHexagon, *self.prev)
+            # if isMove:
+            #     self.can.itemconfigure(self.hexagons[game.selectedHexagon[1]].tags, fill='pink')
+            #     print('here 2')
+            #     offset = define_offset(x, y)
+            #     if game.turn == 1:
+            #         self.can.create_text(y * (20 * 1.5) + (20 / 2),
+            #                              (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+            #                              text='1')
+            #     elif game.turn == 2:
+            #         self.can.create_text(y * (20 * 1.5) + (20 / 2),
+            #                              (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+            #                              text='2')
+            # print('wtf')
             self.move = False
             self.prev = None
             print('here')
