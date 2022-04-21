@@ -190,8 +190,24 @@ def open_window_for_insect_selection(insect_selection_window, self):
     )
     lbl_grasshopper_count.place(x=250, y=640)
 
+    def define_offset(a, b):
+        if b % 2 == 0:
+            offset = 20 * math.sqrt(3) / 2
+        else:
+            offset = 0
+        return offset
+
     def minus_1_queen(x, y, main_window):
         main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='yellow')
+        offset = define_offset(x, y)
+        if game.turn == 1:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='1')
+        elif game.turn == 2:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='2')
         if lbl_queen_count['text'] >= 1:
             lbl_queen_count['text'] = lbl_queen_count['text'] - 1
             print("Queen is chosen")
@@ -202,6 +218,16 @@ def open_window_for_insect_selection(insect_selection_window, self):
 
     def minus_1_ant(x, y, main_window):
         main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#ED9121')
+
+        offset = define_offset(x, y)
+        if game.turn == 1:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='1')
+        elif game.turn == 2:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='2')
         if lbl_ant_count['text'] >= 1:
             lbl_ant_count['text'] = lbl_ant_count['text'] - 1
             print("Ant is chosen")
@@ -212,6 +238,15 @@ def open_window_for_insect_selection(insect_selection_window, self):
 
     def minus_1_beetle(x, y, main_window):
         main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='black')
+        offset = define_offset(x, y)
+        if game.turn == 1:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='1')
+        elif game.turn == 2:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='2')
         if lbl_beetle_count['text'] >= 1:
             lbl_beetle_count['text'] = lbl_beetle_count['text'] - 1
             print("Beetle is chosen")
@@ -222,6 +257,15 @@ def open_window_for_insect_selection(insect_selection_window, self):
 
     def minus_1_spider(x, y, main_window):
         main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#8A360F')
+        offset = define_offset(x, y)
+        if game.turn == 1:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='1')
+        elif game.turn == 2:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='2')
         if lbl_spider_count['text'] >= 1:
             lbl_spider_count['text'] = lbl_spider_count['text'] - 1
             print("Spider is chosen")
@@ -232,6 +276,15 @@ def open_window_for_insect_selection(insect_selection_window, self):
 
     def minus_1_grasshopper(x, y, main_window):
         main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#76EE00')
+        offset = define_offset(x, y)
+        if game.turn == 1:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='1')
+        elif game.turn == 2:
+            self.can.create_text(y * (20 * 1.5) + (20 / 2),
+                                 (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                                 text='2')
         if lbl_grasshopper_count['text'] >= 1:
             lbl_grasshopper_count['text'] = lbl_grasshopper_count['text'] - 1
             print("Grasshopper is chosen ")
@@ -249,10 +302,6 @@ def open_window_for_insect_selection(insect_selection_window, self):
     #     print(x, y)
     #     self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
     pane.mainloop()
-
-
-# def button_got_clicked():
-# print("fuck u")
 
 
 class App(tkinter.Tk):
@@ -356,7 +405,6 @@ class App(tkinter.Tk):
                 # game.fillHome(game.turn, piece, x, y)
                 for x, y in avail:
                     self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
-                # clicked = self.can.itemconfigure(clicked , fill='#FF4040')
                 print(avail)
             if piece == QUEEN:
                 avail = game.queenValidMoves(*game.selectedHexagon)
