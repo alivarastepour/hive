@@ -74,9 +74,8 @@ class Game:
         if self.isFirstMove:
             self.isFirstMove = False
 
-
-    def changeHome(self, x, y):
-        self.occupiedHomes.update({(x, y): self.occupiedHomes.pop(self.selectedHexagon)})
+    def changeHome(self, x, y, prevX, prevY):
+        self.occupiedHomes.update({(x, y): self.occupiedHomes.pop((prevX, prevY))})
 
     def isHomeSurrounded(self, x, y):
         neighbors = getNeighbors(x, y)

@@ -324,8 +324,10 @@ class App(tkinter.Tk):
         if game.isSecondMove:
             if game.selectedHexagon not in getNeighbors(11, 11):
                 return
-        if game.selectedHexagon not in game.availablePositions() and game.selectedHexagon not in game.occupiedHomes.keys():
-            return
+        if not self.move:
+            if game.selectedHexagon not in game.availablePositions() and game.selectedHexagon not in game.occupiedHomes.keys():
+                print(game.turn, game.availablePositions())
+                return
         if game.selectedHexagon in game.occupiedHomes.keys():
             t = game.occupiedHomes.get(game.selectedHexagon)[0]
             print('check', t, game.turn)
@@ -337,9 +339,10 @@ class App(tkinter.Tk):
                 self.move = False
                 self.prev = None
                 return
-            game.changeHome(*game.selectedHexagon, *game.prev)
+            game.changeHome(*game.selectedHexagon, *self.prev)
             self.move = False
             self.prev = None
+            print('here')
             if game.turn == 1:
                 game.turn = 2
             else:
@@ -377,8 +380,9 @@ class App(tkinter.Tk):
                     self.can.itemconfigure(self.hexagons[y * 22 + x].tags, fill='#006400')
                 print(avail)
             self.past = avail.copy()
-            self.move = True
-            self.prev = game.selectedHexagon
+            if avail:
+                self.move = True
+                self.prev = game.selectedHexagon
         else:
             # avail = game.availablePositions()
             # for x, y in avail:
