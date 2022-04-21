@@ -70,6 +70,7 @@ class Game:
 
     def fillHome(self, user, piece, x, y):  # updates a home state with new piece
         self.occupiedHomes.update({(x, y): (user, piece)})
+        print({(x, y): (user, piece)})
         if self.isFirstMove:
             self.isFirstMove = False
 
