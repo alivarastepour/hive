@@ -209,6 +209,10 @@ def open_window_for_insect_selection(insect_selection_window, self):
             self.hexagons[y * 22 + x].label = lbl
             # --------------------------
             self.hexagons[y * 22 + x].piece_color = 'yellow'
+            self.hexagons[y * 22 + x].label = lbl
+
+
+            # self.hexagons[y * 22 + x].
             # --------------------------
 
         elif game.turn == 2:
@@ -304,7 +308,7 @@ def open_window_for_insect_selection(insect_selection_window, self):
         changeTurn()
 
     def minus_1_grasshopper(x, y, main_window):
-        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill='#76EE00')
+        main_window.can.itemconfigure(main_window.hexagons[y * 22 + x].tags, fill="#76EE00")
         offset = define_offset(x, y)
         if game.turn == 1:
             lbl = self.can.create_text(y * (20 * 1.5) + (20 / 2),
@@ -312,14 +316,14 @@ def open_window_for_insect_selection(insect_selection_window, self):
                                  text='1')
             self.hexagons[y * 22 + x].label = lbl
             # --------------------------
-            self.hexagons[y * 22 + x].piece_color = '#76EE00'
+            self.hexagons[y * 22 + x].piece_color = "#76EE00"
         elif game.turn == 2:
             lbl = self.can.create_text(y * (20 * 1.5) + (20 / 2),
                                  (x * (20 * math.sqrt(3))) + offset + (20 / 2),
                                  text='2')
             self.hexagons[y * 22 + x].label = lbl
             # --------------------------
-            self.hexagons[y * 22 + x].piece_color = '#76EEE00'
+            self.hexagons[y * 22 + x].piece_color = "#76EE00"
         if lbl_grasshopper_count['text'] >= 1:
             lbl_grasshopper_count['text'] = lbl_grasshopper_count['text'] - 1
             print("Grasshopper is chosen ")
@@ -440,16 +444,22 @@ class App(tkinter.Tk):
                 self.can.itemconfigure(self.hexagons[self.prev[1] * 22 + self.prev[0]].tags, fill='white')
                 self.can.itemconfigure(self.hexagons[game.selectedHexagon[1] * 22 + game.selectedHexagon[0]].tags,
                                        fill=prev_color)
+                self.hexagons[game.selectedHexagon[1] * 22 + game.selectedHexagon[0]].piece_color = prev_color
+                self.past.remove(game.selectedHexagon)
                 # --------------------------
                 self.can.delete(self.hexagons[self.prev[1] * 22 + self.prev[0]].label)
-                offset = define_offset(x, y)
+
+                offset = define_offset(game.selectedHexagon[0], game.selectedHexagon[1])
                 if game.turn == 1:
-                    self.can.create_text(y * (20 * 1.5) + (20 / 2),
-                                         (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+
+                    self.hexagons[game.selectedHexagon[1] * 22 + game.selectedHexagon[0]].label = \
+                        self.can.create_text(game.selectedHexagon[1] * (20 * 1.5) + (20 / 2),
+                                         (game.selectedHexagon[0] * (20 * math.sqrt(3))) + offset + (20 / 2),
                                          text='1')
                 elif game.turn == 2:
-                    self.can.create_text(y * (20 * 1.5) + (20 / 2),
-                                         (x * (20 * math.sqrt(3))) + offset + (20 / 2),
+                    self.hexagons[game.selectedHexagon[1] * 22 + game.selectedHexagon[0]].label = \
+                        self.can.create_text(game.selectedHexagon[1] * (20 * 1.5) + (20 / 2),
+                                         (game.selectedHexagon[0] * (20 * math.sqrt(3))) + offset + (20 / 2),
                                          text='2')
             self.move = False
             self.prev = None
