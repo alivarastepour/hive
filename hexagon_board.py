@@ -439,7 +439,11 @@ class App(tkinter.Tk):
             print('check', t, game.turn)
             if t != game.turn:
                 return
-        # print(f"x: {clicked % 22 -1 }, y: {clicked // 22} selected.")
+            if game.turn == 1 and not user1.hasEnteredTheQueen:
+                return
+            if game.turn == 2 and not user2.hasEnteredTheQueen:
+                return
+                    # print(f"x: {clicked % 22 -1 }, y: {clicked // 22} selected.")
         if self.move:
             if self.prev == game.selectedHexagon:
                 self.move = False
