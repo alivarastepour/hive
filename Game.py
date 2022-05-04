@@ -97,6 +97,18 @@ class Game:
         g1.append((x, y))
         return self.checkConnectivity(g1)
 
+    def filterValidHomes(self, validHomes):
+        newArr = list(self.occupiedHomes.keys()).copy()
+        newArr.remove(self.selectedHexagon)
+        res = []
+        for home in validHomes:
+            newArr.append(home)
+            cond = self.checkConnectivity(newArr)
+            if cond:
+                res.append(home)
+            newArr.remove(home)
+        return res
+
     def grasshopperValidMoves(self, x, y):  # returns all valid positions for a grasshopper
         validHomes = []
         if (x, y) not in self.occupiedHomes.keys():
@@ -121,6 +133,7 @@ class Game:
         for neighbor in neighbors:
             if neighbor not in self.occupiedHomes.keys() and not self.isHomeSurrounded(*neighbor):
                 validHomes.append(neighbor)
+        validHomes = self.filterValidHomes(validHomes)
         return validHomes
 
     def antValidMoves(self, x, y):  # returns all valid positions for an ant

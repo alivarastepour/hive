@@ -431,8 +431,8 @@ class App(tkinter.Tk):
             if game.selectedHexagon not in getNeighbors(11, 11):
                 return
         if not self.move:
-            if game.selectedHexagon not in game.availablePositions() and game.selectedHexagon not in game.occupiedHomes.keys():
-                print(game.turn, game.availablePositions())
+            if game.selectedHexagon not in game.occupiedHomes.keys() and game.selectedHexagon not in game.availablePositions():
+                # print(game.turn, game.availablePositions())
                 return
         if game.selectedHexagon in game.occupiedHomes.keys():
             t = game.occupiedHomes.get(game.selectedHexagon)[0]
